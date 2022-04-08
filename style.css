@@ -3,22 +3,22 @@ body, html {
     padding: 0;
 }
 
-
 body {
     background-color: #00264d;
     color: white;
 }
 
-.container {
+.startContainer {
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    top: 50%;
+    left: 50%;
     font-family: Arial, Helvetica, sans-serif
 }
 
 .startButton {
-    display: inline-block;
     width: 300px;
     height: 150px;
     font-size: 45px;
@@ -27,7 +27,9 @@ body {
 }
 
 .startButtonText{
-    position: relative;
+    user-select: none;
+    position: absolute;
+    white-space: nowrap;
     user-select: none;
     font-size:45px;
     color: black;
