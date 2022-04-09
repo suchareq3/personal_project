@@ -10,8 +10,51 @@
     <script src="jquery_functions.js"></script>
     </head>
 <body>
+    <div class="preGameChoices">
+        <div class="questionQuantity">
+            <select name="amount" id="quantity" class="selectChoice">
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10" selected="selected">10 (default)</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+        <div>
+            <select name="category" id="category" class="selectChoice">
+                <option value="">Any Category</option>
+                <option value="9">General Knowledge</option>
+                <option value="18">Science: Computers</option>
+                <option value="20">Mythology</option>
+                <option value="21">Sports</option>
+                <option value="22">Geography</option>
+                <option value="23">History</option>
+                <option value="26">Celebrities</option>
+                <option value="27">Animals</option>
+                <option value="29">Entertainment: Comics</option>
+                <option value="30">Science: Gadgets</option>
+                <option value="31">Entertainment: Anime & Manga</option>
+                <option value="32">Entertainment: Cartoon & Animations</option>
+            </select>
+        </div>
+        <div>
+            <select name="difficulty" id="questionDifficulties" class="selectChoice">
+                <option value="">Any Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div class="radioChoice">
+            <input type="radio" name="type" id="anyQuestions" value="" checked="checked ">
+            <label for="anyQuestions">Any</label>
+            <input type="radio" name="type" id="multiChoice" value="multiple">
+            <label for="multiChoice">Multiple choice</label>
+            <input type="radio" name="type" id="trueOrFalse" value="boolean">
+            <label for="trueFalse">True/False</label>
+        </div>
+    </div>
     <div class="startContainer">
-        <button class="startButton" id="mybutton" >Start Game</button>
+        <button class="startButton" id="mybutton">Start Game</button>
         <div class="startButtonText"></div>
     </div>
 
@@ -20,7 +63,7 @@
 
         </div>
         <div class="answers">
-            <div class="multipleChoice">
+            <div class="multiChoice">
 
             </div>
             <div class="trueFalse">
