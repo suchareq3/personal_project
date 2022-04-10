@@ -1,29 +1,28 @@
-//$(selector).action()
 $(document).ready(function(){
     $(".startButton").click(function(){
-        callAPI();
         startButtonAnimation();
-    });
-
-    /*$.get("https://opentdb.com/api.php?amount=1&type=multiple", function(data){
-        data.results.forEach(result => {
-            var answers = result.incorrect_answers;
-            answers.push(result.correct_answer);
-            shuffleArray(answers);
-            for (let i = 0; i < answers.length; i++) {
-                $(".multipleChoice").append("<div class='multiAnswer" + i + "'>" + answers[i] + "</div>");
-                if (answers[i] == result.correct_answer){
-                    $(".multiAnswer" + i.css("color","green"));
-                }
-            }
+        var APIurl = buildAPICall();
+        //add function ON THIS LINE to SHOW hidden loading screen/gif
+        $.get(APIurl, function(APIdata){
+            //add function ON THIS LINE to HIDE shown loading screen/gif
+            var questionIndex = 0;
+            showGameContent(APIdata, questionIndex);
         });
-        }
-    );*/
+    });
 });
 
 
 
-function callAPI(){
+function startButtonAnimation(){
+    $(".startButtonText").html( $(".startButton").html() );
+    $(".startButton").html("");
+    $(".startButtonText").fadeOut({duration:1000, queue:false});
+    $(".startButton").fadeOut({duration:1000, queue:false});
+    $(".startButtonText").animate({"font-size": "150px"}, 1000);
+    this.disabled = true;
+}
+
+function buildAPICall(){
     let APIurl = "https://opentdb.com/api.php?";
     $('.selectChoice').map(function(){
         if(this.value){
@@ -38,26 +37,28 @@ function callAPI(){
     } else {
         APIurl = APIurl.slice(0, -1);
     }
+    return APIurl;
+}
 
-    //alert(APIurl);
+function showGameContent(APIdata, questionIndex){
+    const currentResult = APIdata.results[questionIndex];
+    let answers = currentResult.incorrect_answers;
+    answers.push(currentResult.correct_answer);
+    shuffleArray(answers);
+    $(".question").html(currentResult.question);
 
-    $.get(APIurl, function(data){
-        alert(JSON.stringify(data));
+    for (let j = 0; j < answers.length; j++) {
+        const element = answers[j];
+        $(".answers").append("<button class='answerButton'>" + answers[j] + "</button>");
+    }
+
+    $(".answerButton").click(function(){
+        $(".answers").html("");
+        if ( questionIndex < (APIdata.results.length - 1)) {
+            questionIndex += 1;
+            showGameContent(APIdata, questionIndex);
+        }
     });
-}
-
-
-function startButtonAnimation(){
-    $(".startButtonText").html( $(".startButton").html() );
-    $(".startButton").html("");
-    $(".startButtonText").fadeOut({duration:1000, queue:false});
-    $(".startButton").fadeOut({duration:1000, queue:false});
-    $(".startButtonText").animate({"font-size": "150px"}, 1000);
-    this.disabled = true;
-}
-
-function showGameContent(){
-    
 }
 
 // copied from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
