@@ -1,3 +1,6 @@
+var questionIndex = 0;
+var points = 0;
+
 $(document).ready(function(){
     $(".startButton").click(function(){
         startButtonAnimation();
@@ -5,8 +8,9 @@ $(document).ready(function(){
         //add function ON THIS LINE to SHOW hidden loading screen/gif
         $.get(APIurl, function(APIdata){
             //add function ON THIS LINE to HIDE shown loading screen/gif
-            var questionIndex = 0;
-            showGameContent(APIdata, questionIndex);
+            var maxQuestions = APIdata.results.length;
+            $(".points").html("0/" + maxQuestions);
+            showGameContent(APIdata, maxQuestions);
         });
     });
 });
@@ -40,25 +44,37 @@ function buildAPICall(){
     return APIurl;
 }
 
-function showGameContent(APIdata, questionIndex){
-    const currentResult = APIdata.results[questionIndex];
-    let answers = currentResult.incorrect_answers;
-    answers.push(currentResult.correct_answer);
-    shuffleArray(answers);
-    $(".question").html(currentResult.question);
+function showGameContent(APIdata, maxQuestions){
+    if (questionIndex == maxQuestions){
+        //TODO: make this fancy
+        $(".skipQuestion").html("You've reached the end! You have: " + points + " points out of " + maxQuestions + ".");
+    } else {
+        const currentResult = APIdata.results[questionIndex];
+        let answers = currentResult.incorrect_answers;
+        answers.push(currentResult.correct_answer);
+        shuffleArray(answers);
+        $(".question").html(currentResult.question);
 
-    for (let j = 0; j < answers.length; j++) {
-        const element = answers[j];
-        $(".answers").append("<button class='answerButton'>" + answers[j] + "</button>");
-    }
-
-    $(".answerButton").click(function(){
-        $(".answers").html("");
-        if ( questionIndex < (APIdata.results.length - 1)) {
-            questionIndex += 1;
-            showGameContent(APIdata, questionIndex);
+        for (let j = 0; j < answers.length; j++) {
+            const element = answers[j];
+            $(".answers").append("<button class='answerButton'>" + answers[j] + "</button>");
         }
-    });
+
+        $(".answerButton").click(function(){
+            if (this.innerHTML == currentResult.correct_answer) {
+                points++;
+                //add fancy 'correct' screen here for a short time (timeout)
+            } else {
+                //add fancy 'incorrect' screen here for a short time (timeout)
+            }
+            $(".points").html(points + "/" + maxQuestions);
+            $(".answers").html("");
+            if (questionIndex < APIdata.results.length) {
+                questionIndex += 1;
+                showGameContent(APIdata, maxQuestions);
+            }
+        });
+    }
 }
 
 // copied from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
